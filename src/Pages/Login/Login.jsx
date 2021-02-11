@@ -6,7 +6,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -16,7 +15,6 @@ import { AuthContext } from "../../HomePage/HomePage";
 
 const Login = () => {
   const classes = useStyles();
-  const queryString = require("querystring");
   const url = "http://localhost:3001";
   const { dispatch } = useContext(AuthContext);
   const initialState = {
@@ -29,18 +27,21 @@ const Login = () => {
   const [data, setData] = useState(initialState);
 
   const handleInputChange = (event) => {
-    setData({
-      ...data,
-      [event.target.name]: event.target.value,
+    setData((prevState) => {
+      return {
+        ...prevState,
+        [event.target.name]: event.target.value,
+      };
     });
   };
-
   const handleLogin = (event) => {
     event.preventDefault();
-    setData({
-      ...data,
-      isSubmit: true,
-      errorMessage: null,
+    setData((prevState) => {
+      return {
+        ...prevState,
+        isSubmit: true,
+        errorMessage: null,
+      };
     });
 
     const requestBody = {
@@ -49,41 +50,39 @@ const Login = () => {
     };
 
     axios
-      .post(`${url}/api/v1/login`, queryString.stringify(requestBody))
+      .post(`${url}/api/v1/login`, requestBody)
       .then((res) => {
-        console.log(res);
         if (res.data.data === "Login success") {
           dispatch({
             type: "LOGIN",
             payload: res.data,
           });
-        } else {
-          setData({
-            ...data,
-            isSubmit: false,
-            errorMessage: "error",
-          });
         }
-        throw res;
       })
-      .catch((err) => console.log(err));
-    setData({
-      username: "",
-      password: "",
+      .catch((err) => {
+        setData((prevState) => {
+          return {
+            ...prevState,
+            isSubmit: false,
+            errorMessage: err.response.data.data,
+          };
+        });
+        setTimeout(() => {
+          setData((prevState) => {
+            return {
+              ...prevState,
+              errorMessage: null,
+            };
+          });
+        }, 3000);
+      });
+    setData((prevState) => {
+      return {
+        ...prevState,
+        username: "",
+        password: "",
+      };
     });
-  };
-
-  const Copyright = () => {
-    return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {"Copyright © "}
-        <Link color="inherit" href="#">
-          Your Fuckin' Website
-        </Link>{" "}
-        {new Date().getFullYear()}
-        {"."}
-      </Typography>
-    );
   };
   return (
     <Container component="main" maxWidth="xs">
@@ -149,9 +148,6 @@ const Login = () => {
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
 };

@@ -9,7 +9,11 @@ import Navbar from "./Navbar/Navbar";
 import Home from "../Pages/Home/Home";
 import Register from "../Pages/Register/Register";
 import Login from "../Pages/Login/Login";
+import Box from "@material-ui/core/Box";
 import Dashboard from "../Pages/Dashboard/Dashboard";
+import Copyright from "./Copyright/Copyright";
+import Items from "../Pages/Dashboard/Items/Items";
+import Category from "../Pages/Dashboard/Category/Category";
 
 export const AuthContext = createContext();
 const initialState = {
@@ -19,7 +23,8 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      localStorage.setItem("token", JSON.stringify(action.payload.token));
+      localStorage.setItem("token", action.payload.token);
+      console.log(action);
       return {
         ...state,
         isAuthenticated: true,
@@ -35,10 +40,8 @@ const reducer = (state, action) => {
       return state;
   }
 };
-
 const HomePage = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
   return (
     <Router>
       <AuthContext.Provider
@@ -48,7 +51,7 @@ const HomePage = () => {
         }}
       >
         <Navbar />
-        {!state.isAuthenticated ? (
+        {!localStorage.getItem("token") ? (
           <Redirect
             to={{
               pathname: "/login",
@@ -66,7 +69,12 @@ const HomePage = () => {
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/items" component={Items} />
+          <Route exact path="/category" component={Category} />
         </Switch>
+        <Box mt={8}>
+          <Copyright />
+        </Box>
       </AuthContext.Provider>
     </Router>
   );
