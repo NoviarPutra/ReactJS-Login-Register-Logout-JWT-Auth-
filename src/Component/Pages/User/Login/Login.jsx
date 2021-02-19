@@ -1,31 +1,34 @@
 import React, { useContext, useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Alert from "@material-ui/lab/Alert";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-import useStyles from "./Styles";
 import axios from "axios";
-import { AuthContext } from "../../HomePage/HomePage";
+import { GlobalContext } from "../../../../Context/GlobalState";
+import ActionType from "../../../../Context/globalActionType";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  Container,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import useStyles from "./Styles";
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
   const url = "http://localhost:3001";
-  const { dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(GlobalContext);
   const initialState = {
     username: "",
     password: "",
     isSubmit: false,
     errorMessage: null,
   };
-
   const [data, setData] = useState(initialState);
 
+  // HANDLE ON_CHANGE
   const handleInputChange = (event) => {
     setData((prevState) => {
       return {
@@ -34,6 +37,8 @@ const Login = () => {
       };
     });
   };
+
+  // HANDLE LOGIN
   const handleLogin = (event) => {
     event.preventDefault();
     setData((prevState) => {
@@ -54,9 +59,10 @@ const Login = () => {
       .then((res) => {
         if (res.data.data === "Login success") {
           dispatch({
-            type: "LOGIN",
+            type: ActionType.LOGIN,
             payload: res.data,
           });
+          props.history.push("/dashboard");
         }
       })
       .catch((err) => {
@@ -84,6 +90,7 @@ const Login = () => {
       };
     });
   };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

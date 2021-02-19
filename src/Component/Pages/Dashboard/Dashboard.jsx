@@ -1,11 +1,13 @@
 import React from "react";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import { Typography } from "@material-ui/core";
+import { Redirect } from "react-router-dom";
+import { Container, Grid, Typography } from "@material-ui/core";
 import useStyles from "./Styles";
 
 const Dashboard = () => {
   const classes = useStyles();
+  if (!localStorage.getItem("token")) {
+    return <Redirect to="/login" />;
+  }
   return (
     <div className={classes.root}>
       <Container maxWidth="md" spacing={3}>

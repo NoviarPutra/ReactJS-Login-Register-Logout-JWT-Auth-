@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
+import { GlobalContext } from "../../Context/GlobalState";
 import {
   Button,
   Typography,
@@ -10,21 +11,12 @@ import {
   TableRow,
   Paper,
 } from "@material-ui/core";
-import useStyles from "../../Items/Table/Styles";
-import axios from "axios";
+import useStyles from "./Styles";
 
 const TableCategory = () => {
   const classes = useStyles();
-  const url = "http://localhost:3001";
-  const [tableCategory, setTableCategory] = useState([]);
-  useEffect(() => {
-    const getTableCategory = () => {
-      axios.get(`${url}/api/v1/items/type`).then((res) => {
-        setTableCategory(res.data.data);
-      });
-    };
-    getTableCategory();
-  }, []);
+  const { state, deleteCategory, handleUpdate } = useContext(GlobalContext);
+  const timeStamp = new Date().getTime();
   return (
     <>
       <Typography className={classes.label}>Data Items</Typography>
@@ -38,36 +30,9 @@ const TableCategory = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {dataTable.map((table) => {
+            {state.categories.map((table) => {
               return (
-                <>
-                  <TableRow key={table.id}>
-                    <TableCell>{table.name}</TableCell>
-                    <TableCell align="right">{table.price}</TableCell>
-                    <TableCell align="right">{table.type.name}</TableCell>
-                    <TableCell align="right">
-                      <Button
-                        className={classes.button}
-                        variant="contained"
-                        color="primary"
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        className={classes.button}
-                        variant="contained"
-                        color="secondary"
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                </>
-              );
-            })} */}
-            {tableCategory.map((table) => {
-              return (
-                <TableRow key={table.id}>
+                <TableRow key={table.id + timeStamp}>
                   <TableCell align="center">{table.id}</TableCell>
                   <TableCell align="center">{table.name}</TableCell>
                   <TableCell align="center">
@@ -75,6 +40,7 @@ const TableCategory = () => {
                       className={classes.button}
                       variant="contained"
                       color="primary"
+                      onClick={() => handleUpdate(table)}
                     >
                       Edit
                     </Button>
@@ -82,6 +48,7 @@ const TableCategory = () => {
                       className={classes.button}
                       variant="contained"
                       color="secondary"
+                      onClick={() => deleteCategory(table.id)}
                     >
                       Delete
                     </Button>

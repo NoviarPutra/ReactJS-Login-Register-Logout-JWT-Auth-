@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { GlobalContext } from "../../Context/GlobalState";
 import useStyles from "./Styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -6,11 +7,10 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import InputBase from "@material-ui/core/InputBase";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../HomePage/HomePage";
 
 const Navbar = () => {
   const classes = useStyles();
-  const { dispatch } = useContext(AuthContext);
+  const { state, dispatch } = useContext(GlobalContext);
 
   return (
     <div>

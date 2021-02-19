@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import useStyles from "./Styles";
-import CardItem from "./Card/CardItem";
 import axios from "axios";
+import CardItem from "../../Card/CardItem";
 
 const Home = () => {
   const classes = useStyles();
@@ -15,7 +15,7 @@ const Home = () => {
       });
     };
     getItem();
-  }, [arr]);
+  }, []);
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
