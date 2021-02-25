@@ -21,6 +21,16 @@ export const AppReducer = (state, action) => {
         ...state,
         categories: action.payload,
       };
+    case ActionType.SEARCH_ITEM:
+      return {
+        ...state,
+        items: action.payload,
+      };
+    case ActionType.SEARCH_CATEGORY:
+      return {
+        ...state,
+        categories: action.payload,
+      };
     case ActionType.POST_ITEM:
       return {
         ...state,

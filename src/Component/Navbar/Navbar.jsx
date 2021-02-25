@@ -1,11 +1,7 @@
 import React, { useContext } from "react";
 import { GlobalContext } from "../../Context/GlobalState";
 import useStyles from "./Styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import InputBase from "@material-ui/core/InputBase";
+import { AppBar, Toolbar, Typography, IconButton } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -22,16 +18,6 @@ const Navbar = () => {
                 <Typography variant="h6" className={classes.title}>
                   Home Page
                 </Typography>
-                <div className={classes.search}>
-                  <InputBase
-                    placeholder="Search…"
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                    inputProps={{ "aria-label": "search" }}
-                  />
-                </div>
                 <div>
                   <Link to="/">
                     <Typography variant="h6" className={classes.link}>
@@ -67,16 +53,6 @@ const Navbar = () => {
                 <Typography variant="h6" className={classes.title}>
                   Dashboard
                 </Typography>
-                <div className={classes.search}>
-                  <InputBase
-                    placeholder="Search…"
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                    inputProps={{ "aria-label": "search" }}
-                  />
-                </div>
                 <div>
                   <Link to="/dashboard">
                     <Typography

@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { GlobalContext } from "../../Context/GlobalState";
 import {
   Button,
+  InputBase,
   Typography,
   Table,
   TableBody,
@@ -15,11 +16,32 @@ import useStyles from "./Styles";
 
 const TableItems = () => {
   const classes = useStyles();
-  const { state, deleteItem, handleUpdate } = useContext(GlobalContext);
+  const { state, deleteItem, handleUpdate, onSearchItem } = useContext(
+    GlobalContext
+  );
   const timeStamp = new Date().getTime();
+  const [search, setSearch] = useState("");
+
+  const handleKeyPressed = (event) => {
+    if (event.key === "Enter") {
+      onSearchItem(search);
+      setSearch("");
+    }
+  };
+
   return (
     <>
       <Typography className={classes.label}>Data Items</Typography>
+      <div className={classes.search}>
+        <InputBase
+          placeholder="Search…"
+          name="search"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          onKeyPress={handleKeyPressed}
+          autoComplete="off"
+        />
+      </div>
       <TableContainer component={Paper}>
         <Table className={classes.table}>
           <TableHead>

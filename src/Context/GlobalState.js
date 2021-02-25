@@ -85,18 +85,7 @@ export const GlobalProvider = ({ children }) => {
       .catch((err) => console.log(err.message));
   };
 
-  // HANDLE UPDATE
-  const handleUpdate = (data) => {
-    console.log(data);
-    setRequest({
-      id: data.id,
-      name: data.name,
-      price: data.price,
-      isUpdate: true,
-    });
-  };
-
-  // HANDLE PUT
+  // PUT_ITEM
   const putItem = () => {
     axios
       .put(
@@ -117,6 +106,7 @@ export const GlobalProvider = ({ children }) => {
       .catch((err) => console.log(err.message));
   };
 
+  // PUT_CATEGORY
   const putCategory = () => {
     axios
       .put(
@@ -130,47 +120,6 @@ export const GlobalProvider = ({ children }) => {
         });
       })
       .catch((err) => console.log(err.message));
-  };
-
-  // HANDLE_SUBMIT
-  const submitItem = (event) => {
-    event.preventDefault();
-    if (request.isUpdate) {
-      putItem();
-      getItems();
-      setRequest({
-        name: "",
-        id_type: "",
-        price: "",
-        isUpdate: false,
-      });
-    } else {
-      postItem();
-      getItems();
-      setRequest({
-        name: "",
-        id_type: "",
-        price: "",
-      });
-    }
-  };
-
-  const submitCategory = (event) => {
-    event.preventDefault();
-    if (request.isUpdate) {
-      putCategory();
-      getCategories();
-      setRequest({
-        name: "",
-        isUpdate: false,
-      });
-    } else {
-      postCategory();
-      getCategories();
-      setRequest({
-        name: "",
-      });
-    }
   };
 
   // DELETE_ITEM
@@ -203,6 +152,91 @@ export const GlobalProvider = ({ children }) => {
       .catch((err) => console.log(err));
   };
 
+  // HANDLE SEARCH ITEM
+  const onSearchItem = (value) => {
+    axios
+      .get(`${url}/items/get`, {
+        params: {
+          name: value,
+          type: value,
+        },
+      })
+      .then((res) => {
+        dispatch({
+          type: ActionType.SEARCH_ITEM,
+          payload: res.data.data,
+        });
+      });
+  };
+
+  const onSearchCategory = (value) => {
+    axios
+      .get(`${url}/items/type/get`, {
+        params: {
+          name: value,
+          type: value,
+        },
+      })
+      .then((res) => {
+        dispatch({
+          type: ActionType.SEARCH_CATEGORY,
+          payload: res.data.data,
+        });
+      });
+  };
+
+  // HANDLE_SUBMIT ITEM
+  const submitItem = (event) => {
+    event.preventDefault();
+    if (request.isUpdate) {
+      putItem();
+      getItems();
+      setRequest({
+        name: "",
+        id_type: "",
+        price: "",
+        isUpdate: false,
+      });
+    } else {
+      postItem();
+      getItems();
+      setRequest({
+        name: "",
+        id_type: "",
+        price: "",
+      });
+    }
+  };
+
+  // HANDLE SUBMIT CATEGORY
+  const submitCategory = (event) => {
+    event.preventDefault();
+    if (request.isUpdate) {
+      putCategory();
+      getCategories();
+      setRequest({
+        name: "",
+        isUpdate: false,
+      });
+    } else {
+      postCategory();
+      getCategories();
+      setRequest({
+        name: "",
+      });
+    }
+  };
+
+  // HANDLE UPDATE
+  const handleUpdate = (data) => {
+    setRequest({
+      id: data.id,
+      name: data.name,
+      price: data.price,
+      isUpdate: true,
+    });
+  };
+
   // HANDLE ON_CHANGE
   const handleOnChange = (event) => {
     setRequest((prevState) => {
@@ -213,23 +247,6 @@ export const GlobalProvider = ({ children }) => {
     });
   };
 
-  // HANDLE SUBMIT
-
-  // const submitCategory = (event) => {
-  // event.preventDefault();
-  // if (data.isUpdate) {
-  //   putData();
-  // } else {
-  //   postData();
-  // }
-  // };
-
-  // HANDLE EDIT
-  // const editCategory = (id) => {
-  //   setData({
-  //     isUpdate: true,
-  //   });
-  // };
   useEffect(() => {
     getItems();
     getCategories();
@@ -249,6 +266,8 @@ export const GlobalProvider = ({ children }) => {
         deleteItem,
         deleteCategory,
         handleUpdate,
+        onSearchItem,
+        onSearchCategory,
       }}
     >
       {children}
